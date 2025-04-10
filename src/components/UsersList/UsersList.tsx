@@ -1,29 +1,35 @@
-import React from "react";
-import { User } from '../../types';
-import styles from './UsersList.module.css'; // Import CSS module
+import React, { useState } from "react";
+import { User } from "../../types";
+import styles from "./UsersList.module.css"; // Import CSS module
+import { useNavigate } from "react-router-dom";
 
-interface Props {
-    users: User[];
+interface UserListProps {
+  users: User[];
 }
 
-const UsersList: React.FC<Props> = ({ users }) => {
-    const renderList = (): React.ReactNode[] => {
-        return users.map((user) => (
-            <li key={user.name} className={styles.listItem}>
-                <div className={styles.userInfo}>
-                    <h2 className={styles.user}>{user.name}</h2>
-                    <h3 className={styles.age}>Age: {user.age}</h3>
-                    <p className={styles.email}>{user.email}</p>
-                </div>
-            </li>
-        ));
-    };
+const UserList: React.FC<UserListProps> = ({ users }) => {
+  const navigate = useNavigate();
 
-    return (
-        <ul className={styles.list}>
-            {renderList()}
-        </ul>
-    );
+  const handleUserClick = (id: string) => {
+    navigate(`/update/${id}`);
+  };
+
+  return (
+    <ul className={styles.list}>
+      {users.map((user) => (
+        <li
+          key={user._id}
+          className={styles.listItem}
+          onClick={() => handleUserClick(user._id)}
+        >
+          <div className={styles.userInfo}>
+            <h2 className={styles.user}>{user.name}</h2>
+            <p className={styles.email}>{user.email}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
 };
 
-export default UsersList;
+export default UserList;
